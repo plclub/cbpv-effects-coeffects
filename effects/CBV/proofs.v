@@ -1,0 +1,96 @@
+Require Export effects.CBV.translation effects.CBPV.renaming.
+
+Theorem translation_correct :
+    forall n (Γ : contextL n) e T,
+    Wt Γ e T ->
+    CWt (translateContext Γ)
+        (translateTerm e) (CF (translateType T)) ϵ.
+Proof with (autorewrite with trans effects);
+    (eauto with trans typing effects).
+    intros n Γ e T H.
+    induction H; cbn.
+    - (*var*) econstructor...
+    - (*abs*) econstructor. econstructor.
+        econstructor.
+        rewrite contextTranslationHom in IHWt...
+    - (*app*) rewrite <- eff_idL.
+        eapply T_Let with
+        (A := translateType (Abs T1 T2))
+        (ϕ2 := ϵ); eauto with effects.
+        rewrite <- eff_idL.
+        eapply T_Let with
+            (A := translateType T1)
+            (ϕ2 := ϵ); eauto with effects.
+      + eapply type_pres_renaming...
+        eapply ren_match_shift.
+      + cbn. apply T_App with
+                (A := translateType T1).
+        * econstructor. econstructor.
+        * econstructor.
+    - (*ret*) econstructor...
+    - (*seq*) rewrite <- eff_idL. eapply T_Let...
+        apply T_Seq.
+        + econstructor.
+        + eapply type_pres_renaming...
+            apply ren_match_shift.
+    - (*pair*) rewrite <- eff_idL. eapply T_Let...
+        rewrite <- eff_idL.
+        eapply T_Let...
+        + eapply type_pres_renaming...
+            eapply ren_match_shift.
+        + econstructor...
+            apply T_VPair.
+            * econstructor...
+            * econstructor...
+    - (*split*) rewrite <- eff_idL. apply T_Let with
+        (A := translateType (Pair T1 T2))
+        (ϕ1 := ϵ) (ϕ2 := ϵ)...
+        apply T_Split
+            with (A1 := translateType T1)
+            (A2 := translateType T2).
+            + cbn. econstructor...
+            + eapply type_pres_renaming...
+                cbn...
+                apply ren_match_up2_ren'.
+    - (*inl*) rewrite <- eff_idL. eapply T_Let...
+        econstructor. econstructor.
+        econstructor.
+    - (*inr*) rewrite <- eff_idL. eapply T_Let...
+        econstructor. econstructor.
+            econstructor.
+    - (*case*) rewrite <- eff_idL. eapply T_Let; subst...
+        eapply T_Case with
+        (A1 := translateType T1)
+        (A2 := translateType T2)...
+        + econstructor.
+        + eapply type_pres_renaming...
+            rewrite contextTranslationHom.
+            apply ren_match_up_ren'.
+        + eapply type_pres_renaming...
+            rewrite contextTranslationHom.
+            apply ren_match_up_ren'.
+    - (*ret*) subst. econstructor...
+    - (* bind *) subst. econstructor. eapply T_Thunk. eapply T_SubEff.
+      eapply T_Let with (A := translateType T1)
+        (ϕ1 := ϕ1)
+        (ϕ2 := ϕ2); eauto with effects.
+        + econstructor... econstructor...
+            eapply T_SubEff with (ϕ := ϵ E+ ϕ1).
+            * econstructor... econstructor. econstructor.
+            * rewrite eff_idL...
+        + rewrite contextTranslationHom in *.
+            eapply T_SubEff with (ϕ := ϵ E+ ϕ2).
+            * eapply T_Let with (A := translateType (Mon ϕ2 T2))...
+                econstructor. econstructor.
+            * rewrite eff_idL...
+        + eauto with effects.
+   - (* coerce *) eapply T_Ret. eapply T_Thunk.
+     cbn in *. eapply T_SubEff.
+     eapply T_Let with (A := translateType (Mon ϕ T)) (ϕ1 := ϵ) (ϕ2 := ϕ).
+     + cbn. eassumption.
+     + econstructor. econstructor...
+     + autorewrite with effects. eauto with effects.
+   - (* tick *) subst. econstructor. econstructor.
+        rewrite <- eff_idR. econstructor...
+        (*econstructor. econstructor. *)
+Qed.

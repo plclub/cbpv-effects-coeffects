@@ -1,0 +1,83 @@
+Require Export resource.CBPV.renaming.
+Require Export resource.CBV.typing.
+From Coq Require Import FunctionalExtensionality.
+
+Fixpoint translateType (T : Ty) : ValTy :=
+    match T with
+    | Unit => VUnit
+    | Pair T1 T2 => VPair (translateType T1) (translateType T2)
+    | Sum T1 T2 => VSum (translateType T1) (translateType T2)
+    | Abs q T1 T2 =>
+        VThunk (CAbs q (translateType T1) (CF Qone (translateType T2)))
+    | Box q T => VThunk (CF q (translateType T))
+    end.
+
+Definition translateContext {n} (Γ : contextL n) : context n :=
+    fun (i : fin n) => translateType (Γ i).
+
+Lemma contextTransReverse : forall n (Γ : contextL n) (i : fin n),
+    translateType (Γ i) = (translateContext Γ) i.
+Proof. auto. Qed.
+
+Lemma contextTranslationHom : forall n (Γ : contextL n) T,
+    translateContext (T .: Γ) = translateType T .: translateContext Γ.
+Proof.
+    induction n;
+    intros Γ T; apply functional_extensionality;
+        intros i; unfold translateContext;
+        destruct i; auto.
+Qed.
+
+Fixpoint translateTerm {n} (e0 : Tm n) : Comp n :=
+     match e0 with
+    | var_Tm i => cRet Qone (var_Val i)
+    | abs q e => cRet Qone (vThunk (cAbs q (translateTerm e)))
+    | app q e1 e2 => (* let q := q_or_1 q' in (*RESOURCE-SPECIFIC*) *)
+        cLet Qone
+            (translateTerm e1)
+            (cLet q
+                ((ren_Comp shift) (translateTerm e2))
+                (cApp
+                    (cForce (var_Val (shift var_zero)))
+                    (var_Val var_zero)))
+    | unit => cRet Qone vUnit
+    | seq e1 e2 =>
+        cLet Qone
+            (translateTerm e1)
+            (cSeq (var_Val var_zero) ((ren_Comp shift) (translateTerm e2)))
+    | pair e1 e2 =>
+        cLet Qone
+            (translateTerm e1)
+            (cLet Qone
+                ((ren_Comp shift) (translateTerm e2))
+                (cRet Qone (vPair (var_Val (shift var_zero)) (var_Val var_zero))))
+    | split q' e1 e2 => let q := q_or_1 q' in (*RESOURCE-SPECIFIC*)
+        cLet q
+            (translateTerm e1)
+            (cSplit q (var_Val var_zero) ((ren_Comp up2_ren') (translateTerm e2)))
+    | inl e => cLet Qone (translateTerm e) (cRet Qone (vInl (var_Val var_zero)))
+    | inr e => cLet Qone (translateTerm e) (cRet Qone (vInr (var_Val var_zero)))
+    | case q e e1 e2 =>
+        cLet q
+            (translateTerm e)
+            (cCase q (var_Val var_zero)
+                ((ren_Comp up_ren') (translateTerm e1))
+                ((ren_Comp up_ren') (translateTerm e2)))
+    | box q e =>
+        let q' := q_or_1 q in (*RESOURCE-SPECIFIC*)
+        cLet q (translateTerm e)
+             (cRet Qone (vThunk (cRet q' (var_Val var_zero))))
+    | unbox q e1 e2 => (* let q := q_or_1 q' in *) (*RESOURCE-SPECIFIC*)
+        cLet q
+            (translateTerm e1)
+            (cLet q
+                    (cForce (var_Val var_zero))
+                    ((ren_Comp up_ren') (translateTerm e2)))
+    end.
+
+Create HintDb trans.
+Hint Resolve translateType
+    translateTerm contextTransReverse
+    contextTranslationHom : trans.
+#[export] Hint Rewrite contextTransReverse
+    contextTranslationHom : trans.
