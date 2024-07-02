@@ -6,20 +6,14 @@ This artifact accompanies the paper "Effects and Coeffects in
 Call-by-Push-Value" and contains mechanically verified proofs of the major
 theorems in the paper, developed using the Coq/Rocq proof assistant.
 
-Two versions of the paper have been included with the artifact. We recommend
-the second version as an overview of the definitions and theorems contained in
-the artifact.
-
-1. The publication version fits into the page limit enforced by the
-   conference. It includes hyperrefs to the public github repository
+  We have included the publication version of the paper with the artifact. This contains hyperrefs to the public github repository
    containing this code. For space reasons, some language features that 
    are part of the artifact are not included in this paper.
        
-2. The extended version more closely corresponds to the artifact. This version
+  TODO
+  We have also included an appendix containing the full rules, taken from an extended version of our paper that more closely corresponds to the artifact. This version
    includes references to definitions and theorems presented as footnotes so
-   they will be available even when the document is printed. This version also
-   includes an appendix where all rules have been typeset. This version will 
-   also be uplaoded to arXiv https://arxiv.org/abs/2311.11795 and will replace the
+   they will be available even when the document is printed. It will be uploaded to arXiv https://arxiv.org/abs/2311.11795 and will replace the
    current version at that link.
        
 ## Dependencies
@@ -28,7 +22,7 @@ No specific hardware requirements.
 
 ## Getting Started Guide
 
-To validate the proofs through the VM, first install `qemu` following the [QEUMU Installation
+To validate the proofs through the VM, first install `qemu` following the [QEMU Installation
 instructions](#installation). Next, start up the VM and
 access the VM through `ssh` following the [Startup](#startup)
 instructions. If done correctly, the terminal should display the
@@ -49,10 +43,9 @@ space.
 
 ## Evaluating the Artifact Functionality
 
-To use Coq to verify the claims from the paper, the reviewers can run
-the following command in the terminal:
+The proofs can be verified by running the following in the terminal
+  from the top-level directory:
 ```sh
-cd ~/supplementary/proofs
 make clean
 make
 ```
@@ -64,12 +57,11 @@ running too many jobs simultaneously can cause the `coqc` compiler to
 be killed. If that happens, you should decrease the number you pass to `-j`.
 
 Note: On a Linux machine with Ryzen 5700x, the entire development
-takes 1 minute 38 seconds to compile with `make -j4`.
+takes TODO to compile with `make -j4`.
 
 A successful compilation should produce the following output:
 
 ```
-sweirich@sixteen cbpv-coeffects % make
 { echo "-R . cbpv " ; ls autosubst2/*.v common/*.v general/*.v */CBPV/*.v */CBV/*.v */CBN/*.v ; } > _CoqProject
 coq_makefile -arg '-w -variable-collision,-meta-collision,-require-in-module,-notation-overridden' -f _CoqProject -o CoqSrc.mk
 make -f CoqSrc.mk
@@ -132,14 +124,14 @@ COQC resource/CBV/syntax.v
 COQC resource/CBV/typing.v
 COQC resource/CBV/translation.v
 COQC resource/CBV/proofs.v
-make[1]: Leaving directory '/Users/sweirich/github/coq/cbpv-coeffects'
+make[1]: Leaving directory '~/cbpv-coeffects' TODO
 ```
 
 ## Evaluating the Artifact Reusibility
 
-Checking the proofs requires the Coq Proof Assistant, version 8.19.0. 
+Checking the proofs requires the Coq Proof Assistant, version 8.19.2. 
 
-Extending the proofs requires the Autosubst 2 tool to regenerate the syntax
+Extending the development with any changes to the syntax requires the Autosubst 2 tool to regenerate the syntax
 files. All syntax files needed for the languages described in the paper are
 already included in the distribution and do not need to be recreated.  (The
 commands `make` and `make clean` do not regenerate or remove these files
@@ -166,8 +158,7 @@ are available in a [separate file](artifact-creation.md).
   results in Section 3 (Coeffects, Version 1)
 
 - resource
-  soundness results in Section 4 (Coeffects, Version 2)
-  [translation proofs are for the combined system]
+  results in Section 4 (Coeffects, Version 2)
 
 - full
   results in Section 5 (Combined)
@@ -265,5 +256,5 @@ qemu-img snapshot -a initial-state disk.qcow2
 
 ### QEMU troubleshooting
 
-If the artifact needs lots of memory you may need to increase the value
+If the artifact needs lots of memory, you may need to increase the value
 of the `QEMU_MEM_MB` variable in the `start.sh` script.

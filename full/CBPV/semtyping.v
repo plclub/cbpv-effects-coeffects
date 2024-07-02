@@ -27,7 +27,8 @@ Fixpoint LRV (A : ValTy) (W : VClos) : Prop :=
       (q <> Qzero /\ forall W, LRV A W -> LRM LRC B (q .: γ) (W .: ρ) M ϕ))
     end.
 
-Definition ρ_ok {n} γ ρ Γ := forall (i : fin n), (γ i = Qzero \/ LRV (Γ i) (ρ i)).
+Definition ρ_ok {n} γ ρ Γ := forall (i : fin n), 
+  (γ i = Qzero \/ LRV (Γ i) (ρ i)).
 
 Definition SemVWt {n} (γ : gradeVec n) (Γ : context n) V A :=
   forall ρ, ρ_ok γ ρ Γ -> exists W, EvalVal γ ρ V W /\ LRV A W.

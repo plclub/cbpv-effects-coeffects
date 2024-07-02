@@ -4,8 +4,8 @@ Import List Notations.
 
 Parameter E : Type.
 
-Parameter ϵ : E.
-Parameter tick : E.
+Parameter ϵ : E. (* effect identity (no effect) *)
+Parameter tick : E. (* specific effect discussed in this paper *)
 Parameter add : E -> E -> E.
 
 Notation "ϕ1 'E+' ϕ2" := (add ϕ1 ϕ2) (at level 60).

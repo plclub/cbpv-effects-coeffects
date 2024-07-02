@@ -41,15 +41,15 @@ Proof.
 Qed.
 
 (*A renaming that maps 0 to 0 and everything else to itself + 1*)
-Notation up_ren' := (up_ren shift).
+Definition up_ren' {n} := (up_ren (shift (n := n))).
 
 (*A renaming that maps 0 to 0, 1 to 1,
     and everything else to itself + 1 *)
-Notation up2_ren' := (up_ren up_ren').
+Definition up2_ren' {n} := (up_ren (up_ren' (n := n))).
 
 (*Fixpoint upn_ren {n} (m : nat) : ren (n + m) (1 + n + m) :=
     match m with
-    | 0 => shift
+    | 0 => up_ren id
     | S m' => up_ren (upn_ren m')
     end. TODO*)
 
