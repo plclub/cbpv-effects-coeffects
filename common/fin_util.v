@@ -1,11 +1,6 @@
 Require Export autosubst2.fintype.
 
-
-(*From Forster*)
-Notation up_ren' := (var_zero .: shift >> shift).
-Notation up2_ren' := (var_zero .: (shift (var_zero) .: shift >> shift >> shift)).
-(*TODO: compare to up_ren in fintype*)
-
+(* Boolean equality of finite sets *)
 Definition fin_eqb {n} : fin n -> fin n -> bool.
 Proof.
     induction n.
@@ -20,6 +15,7 @@ Proof.
         + (*i1 = None, i2 = None*) apply true.
 Defined.
 
+(* Boolean equality of finite sets corresponds to propositional equality *)
 Lemma fin_eqb_eq : forall n (i1 i2 : fin n),
     fin_eqb i1 i2 = true <-> i1 = i2.
 Proof.
@@ -34,6 +30,7 @@ Proof.
             simpl. rewrite IHn2. reflexivity.
 Qed.
 
+(* Boolean inequality of finite sets corresponds to propositional inequality *)
 Lemma fin_eqb_neq : forall n (i1 i2 : fin n),
     fin_eqb i1 i2 = false <-> i1 <> i2.
 Proof.
@@ -43,21 +40,39 @@ Proof.
         contradiction.
 Qed.
 
+(*A renaming that maps 0 to 0 and everything else to itself + 1*)
+Notation up_ren' := (up_ren shift).
+
+(*A renaming that maps 0 to 0, 1 to 1,
+    and everything else to itself + 1 *)
+Notation up2_ren' := (up_ren up_ren').
+
+(*Fixpoint upn_ren {n} (m : nat) : ren (n + m) (1 + n + m) :=
+    match m with
+    | 0 => shift
+    | S m' => up_ren (upn_ren m')
+    end. TODO*)
+
+(* injectivity of a renaming *)
 Definition ren_inj {n m} (renamer : ren n m) :=
     (forall i1 i2, renamer i1 = renamer i2 -> i1 = i2).
 
+(* fm is a weakening of fn *)
 Definition ren_match {n m X} (renamer : ren n m)
     (fn : fin n -> X) (fm : fin m -> X) :=
     forall i, fn i = fm (renamer i).
 
+(* fm maps every element to id except those with a preimage in fin n *)
 Definition default_or_preimage {n m X} (id : X) (fm : fin m -> X) (renamer : ren n m) :=
     (forall j, fm j = id \/ exists i, j = renamer i).
 
+(* sum type reflecting that everything in fin j either does or doesn't have a preimage in fin n *)
 Inductive ren_preimage_cases {n m} (renamer : ren n m) (j : fin m) : Type :=
     | preimage (i : fin n) (H : j = renamer i) : ren_preimage_cases renamer j
     | no_preimage (H : forall (i : fin n), renamer i <> j) : ren_preimage_cases renamer j
     .
 
+(* decidability of j having a preimage in fin n *)
 Definition ren_preimage_dec {n m} :
     forall (renamer : ren n m) (j : fin m), ren_preimage_cases renamer j.
 Proof.
@@ -73,6 +88,8 @@ Proof.
                 -- rewrite fin_eqb_neq in HNone. auto.
 Qed.
 
+(* constructs a weakening of fn by sending an element j of fin m to
+    either fn applied to j's preimage (if any) or to the default value *)
 Definition match_pre_id {n m X} (renamer : ren n m) (fn : fin n -> X)
     (default : X) : fin m -> X := fun j =>
     match ren_preimage_dec renamer j with
@@ -80,6 +97,7 @@ Definition match_pre_id {n m X} (renamer : ren n m) (fn : fin n -> X)
     | no_preimage _ _ H => default
     end.
 
+(* For any injective renaming, match_pre_id constructs a valid weakening of fn *)
 Lemma match_pre_id_inj_sound :
     forall n m X (renamer : ren n m) (fn : fin n -> X) (default : X),
     ren_inj renamer ->
@@ -97,7 +115,8 @@ Proof.
         + left. reflexivity.
 Qed.
 
-
+(* If we add a new element to the head of our map, that is a valid
+    weakening under shift. *)
 Lemma ren_match_shift :
     forall n X (fn : fin n -> X) x_new,
     ren_match shift fn (x_new .: fn).
@@ -105,6 +124,8 @@ Proof.
     unfold ren_match. intros. auto.
 Qed.
 
+(* If we add a new element immediately after the head of our map, 
+    that is a valid weakening under up_ren'. *)
 Lemma ren_match_up_ren' :
     forall n X (fn : fin n -> X) x x_new,
     ren_match up_ren' (x .: fn) (x .: (x_new .: fn)).
@@ -113,6 +134,8 @@ Proof.
     destruct i as [i' | ]; auto.
 Qed.
 
+(* If we add a new element two indices after the head of our map, 
+    that is a valid weakening under up2_ren'. *)
 Lemma ren_match_up2_ren' :
     forall n X (fn : fin n -> X) x1 x2 x_new,
     ren_match up2_ren'
@@ -129,10 +152,11 @@ Lemma x_equal
      : forall (A B : Type) (f g : A -> B) (x : A), f = g -> f x = g x.
 Proof. intros. rewrite H. auto. Qed.
 
-
+(* map for environments *)
 Definition env_map {n}{A B} (f : A -> B) (ρ : fin n -> A) : fin n -> B :=
   fun x => f (ρ (x)).
 
+(* env_map f commutes with scons *)
 Lemma env_map_cons {n} {A B} (a : A) (b : fin n -> A) (f : A -> B) : 
   env_map f ( a .: b ) = f a .: env_map f b .
 Proof.
@@ -140,6 +164,7 @@ Proof.
   unfold scons. destruct x. auto. auto.
 Qed.
 
+(* scons is injective in the first argument *)
 Lemma scons_inj1 {n A} (a c : A) (b d : fin n -> A) : ( a .: b ) = (c .: d) -> a = c.
 Proof.
   intros h.
@@ -148,6 +173,7 @@ Proof.
   auto.
 Qed.
 
+(* scons is injective in the second argument *)
 Lemma scons_inj2 {n A} (a c : A) (b d : fin n -> A) : ( a .: b ) = (c .: d) -> b = d.
 Proof.
   intros h.

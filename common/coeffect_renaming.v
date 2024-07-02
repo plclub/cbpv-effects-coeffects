@@ -11,12 +11,10 @@ Create HintDb renaming.
    
     γ' = ξ ∘ γ  and Γ' = ξ ∘ Γ
 
-   only weakening with 0
-   for every index in γ', it either corresponds to an index in γ (after
-   renaming) or the grade is 0
-
-   no contraction
-   the renamer is injective 
+   - only weakens with 0
+   - for all γ and γ', 
+        every index in γ' either corresponds to its preimage in γ under the renaming, or is 0
+   - is injective 
 
 *)
 
