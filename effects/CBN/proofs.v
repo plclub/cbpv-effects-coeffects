@@ -12,8 +12,8 @@ Proof with (autorewrite with effects);
     - (*var*) econstructor.
     - (*thunk*) rewrite <- contextTranslationHom.
         auto.
-    - (*seq*) econstructor.
-        rewrite <- eff_idL. econstructor...
+    - (*seq*) eapply T_SubEff. 2: { 
+        rewrite <- eff_idL. econstructor... }
             econstructor... econstructor...
             eapply type_pres_renaming with
                 (Γ := translateContext Γ); auto.

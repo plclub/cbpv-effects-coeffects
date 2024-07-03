@@ -47,11 +47,12 @@ Definition up_ren' {n} := (up_ren (shift (n := n))).
     and everything else to itself + 1 *)
 Definition up2_ren' {n} := (up_ren (up_ren' (n := n))).
 
-(*Fixpoint upn_ren {n} (m : nat) : ren (n + m) (1 + n + m) :=
+(* TODO: generalize up_ren' *)
+(* Fixpoint upn_ren {n} (m : nat) : ren (n + m) (1 + n + m) :=
     match m with
     | 0 => up_ren id
     | S m' => up_ren (upn_ren m')
-    end. TODO*)
+    end. *)
 
 (* injectivity of a renaming *)
 Definition ren_inj {n m} (renamer : ren n m) :=

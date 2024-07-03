@@ -105,12 +105,6 @@ with CWt {n} (Γ : context n) : Comp n -> CompTy -> E -> Prop :=
   (* ----------------------- *)
   CWt Γ cTick (CF VUnit) tick
 
-| T_CSub M B ϕ :
-  CWt Γ M B ϕ ->
-  (* --------------------- *)
-  CWt Γ M B ϕ
-
-  (*TODO: subeff and csub are the same rule in paper*)
 | T_SubEff M B ϕ ϕ' :
   CWt Γ M B ϕ ->
   ϕ E<= ϕ' ->
@@ -120,7 +114,7 @@ with CWt {n} (Γ : context n) : Comp n -> CompTy -> E -> Prop :=
 Hint Constructors VWt CWt : typing.
 #[export] Hint Resolve T_Var T_Thunk T_Unit T_VPair T_Inl T_Inr T_VSub
   T_Abs T_App T_Force T_Split T_Ret T_Let T_CPair T_Fst T_Snd
-  T_Seq T_Case T_CSub T_SubEff : typing.
+  T_Seq T_Case T_SubEff : typing.
 
 Scheme VWt_ind' := Induction for VWt Sort Prop
     with CWt_ind' := Induction for CWt Sort Prop.
