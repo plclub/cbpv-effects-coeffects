@@ -3,22 +3,21 @@ Effects and Coeffects in Call-by-Push-Value
 
 This repository contains a Coq mechanization of the results described in the paper "Effects and Coeffects in Call-By-Push-Value"
 
-- [Draft paper, short version with hyperlinks](short-hyperlinks.pdf)
-- [Draft paper, short version with footnotes](short-footnotes.pdf)
-- [Draft paper, extended version with footnotes](extended-footnotes.pdf)
+We provide three options for connecting the paper with this code base.
 
-
-
-Definition and Lemma correspondence
------------------------------------
-
-The [extended version](`extended-footnotes.pdf`) includes footnotes with each lemma
-statement, that indicate the appropriate definition and source file.
+- [Draft paper, short version with hyperlinks](short-hyperlinks.pdf)  contains hyperlinks that direct to the appropriate source file in this repository.
+- [Draft paper, short version with footnotes](short-footnotes.pdf) contains footnotes that indicate the appropriate source file and definition.
+- [Draft paper, extended version with footnotes](extended-footnotes.pdf) includes the full figures and contains footnotes that indicate the appropriate source file and definition.
 
 Required Axioms and assumptions
 -------------------------------
 
-  + Functional extensionality (`autosubst2/axioms.v`) (from Autosubst)
+As this work is uses [Autosubst 2](https://github.com/uds-psl/autosubst2), we assume functional extensionality.
+
+  + Functional extensionality (`autosubst2/axioms.v`) 
+
+For flexibility this development axiomatizes the required properties of the effect and coeffect structures used by the type systems and operational semantics.
+
   + Axiomatization of effects (`common/effects.v`)
   + Axiomatization of coeffects (`common/coeffects.v`)
   + Additional resource-tracking-specific axiomatization of coeffects
@@ -28,7 +27,7 @@ Required Axioms and assumptions
 System requirements and build instructions
 ------------------------------------------
 
-Compiles with The Coq Proof Assistant, version 8.19.2. The development
+This code has been tested with The Coq Proof Assistant, version 8.19.2. The development
 requires the Autosubst 2 tool to regenerate the syntax files, but these files
 are included in the distribution and do not need to be recreated.
 
