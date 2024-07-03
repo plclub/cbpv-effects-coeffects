@@ -1,11 +1,47 @@
- Effects and Coeffects in Call-by-Push-Value
---------------------------------------------
+Effects and Coeffects in Call-by-Push-Value
+============================================
 
+This repository contains a Coq mechanization of the results described in the paper "Effects and Coeffects in Call-By-Push-Value"
 
-* Proof organization 
+We provide three options for connecting the paper with this code base.
 
-This proof is broken into several subdirectories. Please see the README.md
-files in the individual subdirectories for their contents.
+- [Draft paper, short version with hyperlinks](short-hyperlinks.pdf)  contains hyperlinks that direct to the appropriate source file in this repository.
+- [Draft paper, short version with footnotes](short-footnotes.pdf) contains footnotes that indicate the appropriate source file and definition.
+- [Draft paper, extended version with footnotes](extended-footnotes.pdf) includes the full figures and contains footnotes that indicate the appropriate source file and definition.
+
+Required Axioms and assumptions
+-------------------------------
+
+As this work is uses [Autosubst 2](https://github.com/uds-psl/autosubst2), we assume functional extensionality.
+
+  + Functional extensionality (`autosubst2/axioms.v`) 
+
+For flexibility this development axiomatizes the required properties of the effect and coeffect structures used by the type systems and operational semantics.
+
+  + Axiomatization of effects (`common/effects.v`)
+  + Axiomatization of coeffects (`common/coeffects.v`)
+  + Additional resource-tracking-specific axiomatization of coeffects
+     (`common/resource_axioms.v`)
+  + Axiomatization of discardable effects (`common/junk_axioms.v`)
+
+System requirements and build instructions
+------------------------------------------
+
+This code has been tested with The Coq Proof Assistant, version 8.19.2. The development
+requires the Autosubst 2 tool to regenerate the syntax files, but these files
+are included in the distribution and do not need to be recreated.
+
+All proofs can be compiled using the `make` command from the toplevel directory.
+
+NOTE: The Makefile commands `make` and `make clean` will not regenerate or remove
+these files respectively; `make fullmake` and `make fullclean` will do so and
+so require Autosubst 2.
+
+Mechanization overview 
+----------------------
+
+This mechanization is broken into several subdirectories corresponding to 
+individual sections of the paper.
   
   - `autosubst2`: Two files distributed with Autosubst 2. These files have
     been slightly edited to make them compatible with Coq 8.19.0.
@@ -21,36 +57,11 @@ files in the individual subdirectories for their contents.
   - `resource` : Results in Section 4 (Coeffects, Version 2)
 
   - `full`: Results in Section 5 (Combined system)
+    
+Proof structure
+---------------
 
-* Definition and Lemma correspondence
-
-The [extended version](`paper.pdf`) includes footnotes with each lemma
-statement, that indicate the appropriate definition and source file.
-
-* Required Axioms and assumptions
-
-  + Functional extensionality (`autosubst2/axioms.v`) (from Autosubst)
-  + Axiomatization of effects (`common/effects.v`)
-  + Axiomatization of coeffects (`common/coeffects.v`)
-  + Additional resource-tracking-specific axiomatization of coeffects
-     (`common/resource_axioms.v`)
-  + Axiomatization of discardable effects (`common/junk_axioms.v`)
-
-* System requirements and build instructions
-
-Compiles with The Coq Proof Assistant, version 8.19.2. The development
-requires the Autosubst 2 tool to regenerate the syntax files, but these files
-are included in the distribution and do not need to be recreated.
-
-All proofs can be compiled using the `make` command from the toplevel directory.
-
-NOTE: The Makefile commands `make` and `make clean` will not regenerate or remove
-these files respectively; `make fullmake` and `make fullclean` will do so and
-so require Autosubst 2.
-
-* Formalization overview
-
-This formalization includes multiple base languages (CBPV, CBN, CBV) with
+The proofs include multiple base languages (CBPV, CBN, CBV) with
 multiple type systems (effects/general coeffects/resource
 coeffects/combined). In general, we use the following abbreviation for the
 base language:
@@ -72,7 +83,8 @@ Each language has its own version of some subset of the following files:
   - `translation.v` : Definition of a translation from the language to CBPV
   - `proofs.v`      : Proofs that the translation preserves types
 
-* Syntax overview
+Syntax overview
+---------------
 
 In each case, the syntax of the language has been generated using the
 Autosubst 2 tool, which represents variable binding using de Bruijn
