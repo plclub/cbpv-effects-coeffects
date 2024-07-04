@@ -130,8 +130,6 @@ Proof with eauto.
     - unfold ren_inj. intros i1 i2 H. inversion H. auto.
 Qed.
 
-(* TODO: this can be proved much more simply in terms of upRen_wb and up_ren_wb
-    since up_ren = up_ren shift *)
 (* For any γ, Γ, up_ren is well-behaved with respect to γ, Γ, and the enviroment and
     context obtained by inserting 0 and any type A0, respectively, at index 1*)
 Lemma up_ren_wb {A} : forall n (γ : gradeVec n) q Γ (A1 A0 : A),
@@ -145,8 +143,6 @@ Proof with eauto.
         destruct i1 as [i1' | ], i2 as [i2' | ]; inversion H; auto.
 Qed.
 
-(* TODO: this can be proved much more simply in terms of upRen_wb and up_ren_wb
-    since up2_ren = up_ren up_ren'*)
 (* For any γ, Γ, up2_ren is well-behaved with respect to γ, Γ, and the enviroment and
     context obtained by inserting 0 and any type A0, respectively, at index 2*)
 Lemma up2_ren_wb {A} : forall n (γ : gradeVec n) q1 q2 Γ (A1 A2 A0 : A),

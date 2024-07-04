@@ -12,7 +12,7 @@ We provide three options for connecting the paper with this code base.
 Required Axioms and assumptions
 -------------------------------
 
-As this work is uses [Autosubst 2](https://github.com/uds-psl/autosubst2), we assume functional extensionality.
+As this work uses [Autosubst 2](https://github.com/uds-psl/autosubst2), we assume functional extensionality.
 
   + Functional extensionality (`autosubst2/axioms.v`) 
 

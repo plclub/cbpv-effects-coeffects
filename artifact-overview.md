@@ -10,8 +10,7 @@ theorems in the paper, developed using the Coq/Rocq proof assistant.
    containing this code. For space reasons, some language features that 
    are part of the artifact are not included in this paper.
        
-  TODO
-  We have also included an appendix containing the full rules, taken from an extended version of our paper that more closely corresponds to the artifact. This version
+  We have also included an extended version of our paper that more closely corresponds to the artifact. This version
    includes references to definitions and theorems presented as footnotes so
    they will be available even when the document is printed. It will be uploaded to arXiv https://arxiv.org/abs/2311.11795 and will replace the
    current version at that link.
@@ -219,8 +218,8 @@ Restart your computer.
 
 ### QEMU Startup
 
-The base artifact provides a `start.sh` script to start the VM on unix-like
-systems and `start.bat` for Windows. Running this script will open a graphical
+The `base-image` folder contains a `start.sh` script and a `start.bat` script to start the VM on unix-like
+systems and Windows, respectively. Running this script will open a graphical
 console on the host machine, and create a virtualized network interface.
 On Linux you may need to run with `sudo` to start the VM. 
 

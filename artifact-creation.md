@@ -51,20 +51,20 @@ opam init -a --bare
 ```
 
 Once `opam` is initialized, the next step is to import the switch
-configuration used to build the Coq development.
+configuration used to build the Rocq/Coq development.
 
-First, switch to the directory containing the Coq development:
+First, switch to the directory containing the Rocq development:
 ```sh
 cd ~/cbpv_artifact
 ```
 
 Here you can find a file named
-[coq-switch](coq-switch). TODO This file records the packages and their
+[coq-switch](coq-switch). This file records the packages and their
 versions that we use to verify our development.
 
 You can run the following command to
-create a switch named `cbpv` with Coq (and the required
-libraries) installed: TODO: what about autosubst
+create a switch named `cbpv` with Rocq (and the required
+libraries) installed: 
 ```sh
 opam switch import coq-switch --switch cbpv --repositories=coq-released=https://coq.inria.fr/opam/released,default=https://opam.ocaml.org
 opam switch cbpv
@@ -82,4 +82,4 @@ coqc --help
 
 This completes the construction of the VM. You can now follow the
 instructions from [Quickstart guide](#quickstart-guide) to verify the
-Coq development and type check programs with the prototype implementation.
+Rocq development and type check programs with the prototype implementation.

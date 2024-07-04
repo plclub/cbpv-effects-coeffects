@@ -16,6 +16,7 @@ Fixpoint translateType (T : Ty) : ValTy :=
 Definition translateContext {n} (Γ : contextL n) : context n :=
     fun (i : fin n) => translateType (Γ i).
 
+(* translation commutes with getting type from context *)
 Lemma contextTransReverse : forall n (Γ : contextL n) (i : fin n),
     translateType (Γ i) = (translateContext Γ) i.
 Proof. auto. Qed.
