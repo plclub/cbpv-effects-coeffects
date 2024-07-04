@@ -1,4 +1,5 @@
 # Steps to recreate the artifact environment
+
 This section describes how to recreate the artifact environment from
 the official [Arch Linux VM image](https://gitlab.archlinux.org/archlinux/arch-boxes/).
 
@@ -15,7 +16,7 @@ Here are the package versions that are known to work:
 
 - opam 2.1.6
 
-### Install opam and other develop tools
+### Install opam and other developer tools
 ```sh
 sudo pacman -Syu
 sudo pacman -S opam git unzip make patch gcc
@@ -43,7 +44,8 @@ The `coq-switch` file contained in the unzipped directory will be
 used in the next step to create an opam switch with the dependencies
 properly installed.
 
-### Install Coq and ott
+### Install Coq
+
 After a fresh installation of `opam`, you need to run the
 following command to initialize it.
 ```sh
@@ -78,10 +80,61 @@ command and you should see the help message for Rocq:
 ```sh
 coqc --help
 ```
+
+## Install other Linux tools
+```
+pacman -S emacs
+pacman -S less
+```
+
 # Autosubst2
+
 If you want to regenerate the syntax.v files, you will need to clone Autosubst2 from [Github](https://github.com/uds-psl/autosubst2/tree/main) and build it using the instructions in the README.md file.
 The syntax is already generated, so that step is not necessary to validate the proofs.
 
-This completes the construction of the VM. You can now follow the
-instructions from [artifact-overview](artifact-overview) to verify the
-Rocq development.
+You will need to increase the memory of the VM for this step.
+
+1. install stack 
+
+```
+curl -sSL https://get.haskellstack.org/ | sh
+```
+
+2. Clone the autosubst repo
+```
+git clone https://github.com/uds-psl/autosubst2/
+```
+
+3. Compile using stack
+
+```
+stack setup
+stack init
+stack build
+```
+
+Note: this process uses the most recent LTS from stack. However, as of July 2024, the most `main` branch of autosubst2 does not compile with this stack resolver. 
+
+Edit `stack.yaml` to use an older version of GHC.
+
+```
+resolver:
+  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/21/17.yaml
+```
+
+Then re-execute `stack build`.
+
+4. Install the `as2-exe` executable 
+```
+stack install
+```
+
+Stack will put the executable in `~/.local/bin`. Make sure that this directory is in your path.
+
+5. Install utilities necessary for post-autosubst2 clean-up (`add_imports_to_syntax.pl`)
+
+```
+sudo cpan
+install Path::Tiny
+```
+

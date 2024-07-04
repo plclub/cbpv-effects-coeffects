@@ -6,14 +6,20 @@ This artifact accompanies the paper "Effects and Coeffects in
 Call-by-Push-Value" and contains mechanically verified proofs of the major
 theorems in the paper, developed using the Coq/Rocq proof assistant.
 
-  We have included the publication version of the paper with the artifact. This contains hyperrefs to the public github repository
-   containing this code. For space reasons, some language features that 
-   are part of the artifact are not included in this paper.
+  We have included the publication version of the paper with the
+   artifact. This contains hyperrefs to the public github repository
+   containing this code. For space reasons, some language features that are
+   part of the artifact are not included in this paper.
        
-  We have also included an extended version of our paper that more closely corresponds to the artifact. This version
-   includes references to definitions and theorems presented as footnotes so
-   they will be available even when the document is printed. It will be uploaded to [arXiv](https://arxiv.org/abs/2311.11795) and will replace the
-   current version at that link.
+  We have also included an extended version of our paper that more closely
+   corresponds to the artifact. This version includes references to
+   definitions and theorems presented as footnotes so they will be available
+   even when the document is printed. It will be uploaded to
+   [arXiv](https://arxiv.org/abs/2311.11795) and will replace the current
+   version at that link.
+       
+  The `README.md` file provides an overview of the mechanization itself, 
+  including the proof structure and required axioms.
        
 ## Dependencies
 
@@ -21,11 +27,16 @@ No specific hardware requirements.
 
 ## Getting Started Guide
 
+This artifact includes a virtual machine image for evaluation.
+
 To validate the proofs through the VM, first install `qemu` following the [QEMU Installation
 instructions](#installation). Next, start up the VM and
 access the VM by running `sh startup.sh` in the folder `vm-util`. 
+The username is `arch` and the password is `arch`.
+
 If done correctly, the terminal should display the
 following command line prompt:
+
 ```sh
 [arch@archlinux ~]$
 ```
@@ -43,7 +54,7 @@ space.
 ## Evaluating the Artifact Functionality
 
 The proofs can be verified by running the following in the terminal
-  from the top-level directory:
+  from the  directory `/home/arch/cbpv-effects-coeffects`:
 ```sh
 make clean
 make
@@ -120,11 +131,11 @@ COQC resource/CBV/proofs.v
 make[1]: Leaving directory 'home/arch/cbpv-effects-coeffects' 
 ```
 
-## Evaluating the Artifact Reusibility
+## Evaluating the Artifact Reusability
 
 Checking the proofs requires the Coq Proof Assistant, version 8.19.2. 
 
-Extending the development with any changes to the syntax requires the Autosubst 2 tool to regenerate the syntax
+Extending the development requires the Autosubst 2 tool to regenerate the syntax
 files. All syntax files needed for the languages described in the paper are
 already included in the distribution and do not need to be recreated.  (The
 commands `make` and `make clean` do not regenerate or remove these files
@@ -133,37 +144,6 @@ Autosubst 2.)
 
 Detailed instructions for replicating the environment 
 are available in a [separate file](artifact-creation.md).
-
-
-
-## Contents
-
-- autosubst2
-  files distributed with Autosubst 2
-
-- common
-  files used by all subsections
-
-- effects
-  results in Section 2 (Effects)
-
-- general
-  results in Section 3 (Coeffects, Version 1)
-
-- resource
-  results in Section 4 (Coeffects, Version 2)
-
-- full
-  results in Section 5 (Combined)
-
-## Required axioms
-
-- Axioms required by autosubst  (`autosubst2/axioms.v`)
-- Axiomatization of effects (`common/effects.v`)
-- Axiomatization of coeffects (`common/coeffects.v`)
-- Additional resource-tracking-specific axiomatization of coeffects
-   (`common/resource_axioms.v`)
-- Axiomatization of discardable effects (`common/junk_axioms.v`)
 
 
 ## QEMU Installation instructions
@@ -186,7 +166,6 @@ QEMU homepage: https://www.qemu.org/
 On x86 laptops and server machines you may need to enable the
 "Intel Virtualization Technology" setting in your BIOS, as some manufacturers
 leave this disabled by default. See `vm-util/Debugging.md` for details.
-
 
 #### Arch Linux
 
@@ -212,10 +191,11 @@ Restart your computer.
 
 ### QEMU Startup
 
-The `vm-util` folder contains a `start.sh` script and a `start.bat` script to start the VM on unix-like
-systems and Windows, respectively. Running this script will open a graphical
-console on the host machine, and create a virtualized network interface.
-On Linux you may need to run with `sudo` to start the VM. 
+The `vm-util` folder contains a `start.sh` script and a `start.bat` script to
+start the VM on unix-like systems and Windows, respectively. Running this
+script will open a graphical console on the host machine, and create a
+virtualized network interface.  On Linux you may need to run with `sudo` to
+start the VM.
 
 Once the VM has started you can login to the guest system from the host.
 Whenever you are asked for a password, the answer is `arch`. The default

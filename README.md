@@ -37,6 +37,8 @@ NOTE: The Makefile commands `make` and `make clean` will not regenerate or remov
 these files respectively; `make fullmake` and `make fullclean` will do so and
 so require Autosubst 2.
 
+For tool installation help see `artifact-creation.md`.
+
 Mechanization overview 
 ----------------------
 
