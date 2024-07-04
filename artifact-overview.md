@@ -55,8 +55,8 @@ significantly. However, since the VM by default has only 4 GiB of memory,
 running too many jobs simultaneously can cause the `coqc` compiler to
 be killed. If that happens, you should decrease the number you pass to `-j`.
 
-Note: On a Linux machine with Ryzen 5700x, the entire development
-takes TODO to compile with `make -j4`.
+Note: On a Linux machine with a 13th Gen Intel® Core™ i7, the entire development
+takes 2 minutes to compile with `make -j4`.
 
 A successful compilation should produce the following output:
 
@@ -123,7 +123,7 @@ COQC resource/CBV/syntax.v
 COQC resource/CBV/typing.v
 COQC resource/CBV/translation.v
 COQC resource/CBV/proofs.v
-make[1]: Leaving directory '~/cbpv-coeffects' TODO
+make[1]: Leaving directory 'home/arch/cbpv-effects-coeffects' 
 ```
 
 ## Evaluating the Artifact Reusibility
@@ -218,7 +218,7 @@ Restart your computer.
 
 ### QEMU Startup
 
-The `base-image` folder contains a `start.sh` script and a `start.bat` script to start the VM on unix-like
+The `vm-util` folder contains a `start.sh` script and a `start.bat` script to start the VM on unix-like
 systems and Windows, respectively. Running this script will open a graphical
 console on the host machine, and create a virtualized network interface.
 On Linux you may need to run with `sudo` to start the VM. 

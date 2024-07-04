@@ -1,7 +1,22 @@
-## Steps to recreate the artifact environment
+## VM Creation
 
 This section describes how to recreate the artifact environment from
 the official [Arch Linux VM image](https://gitlab.archlinux.org/archlinux/arch-boxes/).
+
+First, get one of the official Arch Linux provided images from the link above.
+
+Install QEMU and, in the same dir with the image, start the VM with start.sh.
+(Instructions for QEMU installation and start.sh are in artifact-overview.md)
+
+To share the VM, share the image downloaded above (this will just be a file ending in something like .qcow2).
+
+To create a coq-switch, use opam switch export coq-switch.
+
+Note: when zipping the repo, temporarily remove the image so it does not get copied.
+Also run "make clean" first.
+
+# Steps to recreate the artifact environment
+
 The first step uses the package manager `pacman` to install `opam` and is usually only applicable to Arch-based
 distributions. The rest of the steps are mostly distribution-agnostic
 and can be followed if you have a working installation of `opam`.
@@ -18,7 +33,7 @@ Here are the package versions that are known to work:
 ### Install opam and other develop tools
 ```sh
 sudo pacman -Syu
-sudo pacman -S opam git unzip
+sudo pacman -S opam git unzip make patch gcc
 ```
 
 If the installation causes a kernel upgrade, you might want to reboot
@@ -55,7 +70,7 @@ configuration used to build the Rocq/Coq development.
 
 First, switch to the directory containing the Rocq development:
 ```sh
-cd ~/cbpv_artifact
+cd ~/cbpv-effects-coeffects
 ```
 
 Here you can find a file named
@@ -70,15 +85,17 @@ opam switch import coq-switch --switch cbpv --repositories=coq-released=https://
 opam switch cbpv
 eval $(opam env)
 ```
-Note: the `opam switch import` command took around TODO minutes to
-execute on a machine with Ryzen 5700x with 8 cores and 8GiB of memory allocated to the VM.
+Note: the `opam switch import` command took around 12 minutes to
+execute on a machine with 13th Gen Intel® Core™ i7.
 
 To check whether the installation was successful, run the following
-commands and you should see their respective help messages:
+command and you should see the help message for Rocq:
 ```sh
 coqc --help
 ```
-
+# Autosubst2
+If you want to regenerate the syntax.v files, you will need to clone Autosubst2 from [Github](https://github.com/uds-psl/autosubst2/tree/main) and build it using the instructions in the README.md file.
+The syntax is already generated, so that step is not necessary to validate the proofs.
 
 This completes the construction of the VM. You can now follow the
 instructions from [Quickstart guide](#quickstart-guide) to verify the
