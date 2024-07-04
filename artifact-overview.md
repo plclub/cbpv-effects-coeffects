@@ -29,9 +29,13 @@ No specific hardware requirements.
 
 This artifact includes a virtual machine image for evaluation.
 
+You should put the VM image (`disk.qcow2`) in the directory `vm-util` of the unzipped 
+repository.
+
 To validate the proofs through the VM, first install `qemu` following the [QEMU Installation
 instructions](#installation). Next, start up the VM and
 access the VM by running `sh startup.sh` in the folder `vm-util`. 
+
 The username is `arch` and the password is `arch`.
 
 If done correctly, the terminal should display the
