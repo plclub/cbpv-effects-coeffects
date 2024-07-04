@@ -12,7 +12,7 @@ theorems in the paper, developed using the Coq/Rocq proof assistant.
        
   We have also included an extended version of our paper that more closely corresponds to the artifact. This version
    includes references to definitions and theorems presented as footnotes so
-   they will be available even when the document is printed. It will be uploaded to arXiv https://arxiv.org/abs/2311.11795 and will replace the
+   they will be available even when the document is printed. It will be uploaded to [arXiv](https://arxiv.org/abs/2311.11795) and will replace the
    current version at that link.
        
 ## Dependencies
@@ -23,8 +23,8 @@ No specific hardware requirements.
 
 To validate the proofs through the VM, first install `qemu` following the [QEMU Installation
 instructions](#installation). Next, start up the VM and
-access the VM through `ssh` following the [Startup](#startup)
-instructions. If done correctly, the terminal should display the
+access the VM by running `sh startup.sh` in the folder `vm-util`. 
+If done correctly, the terminal should display the
 following command line prompt:
 ```sh
 [arch@archlinux ~]$
@@ -48,15 +48,9 @@ The proofs can be verified by running the following in the terminal
 make clean
 make
 ```
-Optionally, you can pass the `-j[jobs]` flag to `make` where `[jobs]`
-is replaced by an integer representing the number of the jobs
-that you want to run in parallel. This can reduce the build time
-significantly. However, since the VM by default has only 4 GiB of memory,
-running too many jobs simultaneously can cause the `coqc` compiler to
-be killed. If that happens, you should decrease the number you pass to `-j`.
 
 Note: On a Linux machine with a 13th Gen Intel® Core™ i7, the entire development
-takes 2 minutes to compile with `make -j4`.
+takes 2 minutes to compile.
 
 A successful compilation should produce the following output:
 
@@ -64,7 +58,7 @@ A successful compilation should produce the following output:
 { echo "-R . cbpv " ; ls autosubst2/*.v common/*.v general/*.v */CBPV/*.v */CBV/*.v */CBN/*.v ; } > _CoqProject
 coq_makefile -arg '-w -variable-collision,-meta-collision,-require-in-module,-notation-overridden' -f _CoqProject -o CoqSrc.mk
 make -f CoqSrc.mk
-make[1]: Entering directory '/Users/sweirich/github/coq/cbpv-coeffects'
+make[1]: Entering directory 'home/arch/cbpv-effects-coeffects'
 COQDEP VFILES
 COQC autosubst2/axioms.v
 COQC autosubst2/fintype.v
@@ -191,7 +185,7 @@ QEMU homepage: https://www.qemu.org/
 
 On x86 laptops and server machines you may need to enable the
 "Intel Virtualization Technology" setting in your BIOS, as some manufacturers
-leave this disabled by default. See Debugging.md for details.
+leave this disabled by default. See `vm-util/Debugging.md` for details.
 
 
 #### Arch Linux

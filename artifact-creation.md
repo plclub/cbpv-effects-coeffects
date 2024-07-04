@@ -1,21 +1,6 @@
-## VM Creation
-
+# Steps to recreate the artifact environment
 This section describes how to recreate the artifact environment from
 the official [Arch Linux VM image](https://gitlab.archlinux.org/archlinux/arch-boxes/).
-
-First, get one of the official Arch Linux provided images from the link above.
-
-Install QEMU and, in the same dir with the image, start the VM with start.sh.
-(Instructions for QEMU installation and start.sh are in artifact-overview.md)
-
-To share the VM, share the image downloaded above (this will just be a file ending in something like .qcow2).
-
-To create a coq-switch, use opam switch export coq-switch.
-
-Note: when zipping the repo, temporarily remove the image so it does not get copied.
-Also run "make clean" first.
-
-# Steps to recreate the artifact environment
 
 The first step uses the package manager `pacman` to install `opam` and is usually only applicable to Arch-based
 distributions. The rest of the steps are mostly distribution-agnostic
@@ -98,5 +83,5 @@ If you want to regenerate the syntax.v files, you will need to clone Autosubst2 
 The syntax is already generated, so that step is not necessary to validate the proofs.
 
 This completes the construction of the VM. You can now follow the
-instructions from [Quickstart guide](#quickstart-guide) to verify the
-Rocq development and type check programs with the prototype implementation.
+instructions from [artifact-overview](artifact-overview) to verify the
+Rocq development.
