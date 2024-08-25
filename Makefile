@@ -34,7 +34,7 @@ fullmake: _CoqProject coq
 # Generate syntax.v files and add all .v files to _CoqProject
 # This will run Autosubst 2 and add_imports_to_syntax.pl.
 _CoqProject : syntax
-	{ echo "-R . $(LIBNAME) " ; ls autosubst2/*.v common/*.v general/*.v */CBPV/*.v */CBV/*.v */CBN/*.v ; } > _CoqProject
+	{ echo "-R . $(LIBNAME) " ; ls autosubst2/*.v common/*.v general/*.v */CBPV/*.v */CBV/*.v */CBN/*.v effects/EffCBV/*.v  ; } > _CoqProject
 
 # Remove compiled files and also remove
 # the Autosubst-2-generated syntax.v files and auxiliary make files

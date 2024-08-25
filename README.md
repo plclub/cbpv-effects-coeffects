@@ -5,14 +5,14 @@ This repository contains a Coq mechanization of the results described in the pap
 
 We provide three options for connecting the paper with this code base.
 
-- [Draft paper, short version with hyperlinks](short-hyperlinks.pdf)  contains hyperlinks that direct to the appropriate source file in this repository.
-- [Draft paper, short version with footnotes](short-footnotes.pdf) contains footnotes that indicate the appropriate source file and definition.
-- [Draft paper, extended version with footnotes](extended-footnotes.pdf) includes the full figures and contains footnotes that indicate the appropriate source file and definition.
+- [Paper, with hyperlinks](short-hyperlinks.pdf)  contains hyperlinks that direct to the appropriate source file in this repository.
+- [Paper, with footnotes](short-footnotes.pdf) contains footnotes that indicate the appropriate source file and definition.
+- [Extended version of paper, with footnotes](extended-footnotes.pdf) includes the full figures and contains footnotes that indicate the appropriate source file and definition.
 
 Required Axioms and assumptions
 -------------------------------
 
-As this work uses [Autosubst 2](https://github.com/uds-psl/autosubst2), we assume functional extensionality.
+As this work uses [Autosubst 2](https://github.com/uds-psl/autosubst2), we assume functional extensionality. We also use this axiom in the soundness proofs.
 
   + Functional extensionality (`autosubst2/axioms.v`) 
 
@@ -71,6 +71,7 @@ base language:
   - CBPV = Call-By-Push-Value
   - CBN = Call-By-Name lambda-calculus
   - CBV = Call-By-Value lambda-calculus
+  - EffCBV = Call-By-Value lambda-calculus with effect tracking
 
 Each language has its own version of some subset of the following files:
 
