@@ -33,11 +33,6 @@ Inductive VWt {n} (Γ : context n) : Val n -> ValTy -> Prop :=
   (* --------------------------- *)
   VWt Γ (vInr V) (VSum A1 A2)
 
-| T_VSub V A :
-  VWt Γ V A ->
-  (* --------------------- *)
-  VWt Γ V A
-
 with CWt {n} (Γ : context n) : Comp n -> CompTy -> E -> Prop :=
  | T_Abs M A B ϕ :
   CWt (A .: Γ) M B ϕ ->
@@ -112,7 +107,7 @@ with CWt {n} (Γ : context n) : Comp n -> CompTy -> E -> Prop :=
   CWt Γ M B ϕ'.
 
 Hint Constructors VWt CWt : typing.
-#[export] Hint Resolve T_Var T_Thunk T_Unit T_VPair T_Inl T_Inr T_VSub
+#[export] Hint Resolve T_Var T_Thunk T_Unit T_VPair T_Inl T_Inr 
   T_Abs T_App T_Force T_Split T_Ret T_Let T_CPair T_Fst T_Snd
   T_Seq T_Case T_SubEff : typing.
 

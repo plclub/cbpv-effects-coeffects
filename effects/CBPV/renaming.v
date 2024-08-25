@@ -19,7 +19,7 @@ Proof with (eauto with effects typing).
     apply Wt_mutual; intros...
     all: cbn...
     all: unfold ren_match in *.
-    - (*var*) econstructor.
+    - (*var*) 
         specialize H with i as Hi.
         rewrite Hi. econstructor.
     - (*abs*) econstructor.

@@ -125,16 +125,6 @@ Context {n : nat} (Γ : context n) (ϕ : E).
     - exists W. auto.
   Qed.
 
-  Lemma ST_VSub V A :
-    SemVWt Γ V A ->
-    (* ------------------ *)
-    SemVWt Γ V A.
-  Proof.
-    unfold SemVWt. intros IH IHρ H.
-    apply IH in H as [W [HE HL]].
-    repeat eexists. eapply E_VSub. all: eauto.
-  Qed.
-
 (*Computations*)
 
   Lemma ST_Abs A M B :
@@ -367,6 +357,6 @@ Qed.
 
 End SemTyping.
 
-#[export]Hint Resolve ST_Var ST_Thunk ST_Unit ST_VPair ST_Inl ST_Inr ST_VSub ST_Abs
+#[export]Hint Resolve ST_Var ST_Thunk ST_Unit ST_VPair ST_Inl ST_Inr ST_Abs
   ST_App ST_Force ST_Ret ST_Let ST_Split ST_CPair ST_Fst ST_Snd
   ST_Seq ST_Case ST_Tick ST_CSub ST_SubEff : semtyping.
