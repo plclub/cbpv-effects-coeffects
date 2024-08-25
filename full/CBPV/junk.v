@@ -200,7 +200,7 @@ Combined Scheme ty_mutual from ValTy_ind', CompTy_ind'.
 
 Definition ρ_ok {n} γ ρ1 ρ2 Γ :=
   (forall (i : fin n), LRV (Γ i) (ρ1 i) (ρ1 i)) /\
-  forall (i : fin n), (γ i = Qzero) \/ (γ i <> Qzero /\ LRV (Γ i) (ρ1 i) (ρ2 i)).
+  forall (i : fin n), (γ i = Qzero) \/ (LRV (Γ i) (ρ1 i) (ρ2 i)).
 
 Definition SemVWt {n} (γ : gradeVec n) (Γ : context n) V1 V2 A :=
   forall ρ1 ρ2, ρ_ok γ ρ1 ρ2 Γ ->
@@ -222,7 +222,7 @@ Qed.
 
 Lemma ρ_ok_cons {n q γ ρ1 ρ2}{Γ : context n}{W1 W2 A}
   (H0 : LRV A W1 W1)
-  (H1 : q = Qzero \/ (q <> Qzero /\ LRV A W1 W2))
+  (H1 : q = Qzero \/ (LRV A W1 W2))
   (H2 : ρ_ok γ ρ1 ρ2 Γ) :
   ρ_ok (q .: γ) (W1 .: ρ1) (W2 .: ρ2) (A .: Γ).
 Proof.
@@ -234,8 +234,8 @@ Qed.
 Lemma ρ_ok_cons2 n q1 q2 γ ρ1 ρ2  (Γ : context n) W1 W1' W2 W2' A1 A2
   (H0 : LRV A1 W1 W1)
   (H00 : LRV A2 W2 W2)
-  (H1 : (q1 = Qzero) \/ (q1 <> Qzero /\ LRV A1 W1 W1'))
-  (H2 : (q2 = Qzero) \/ (q2 <> Qzero /\ LRV A2 W2 W2'))
+  (H1 : (q1 = Qzero) \/ (LRV A1 W1 W1'))
+  (H2 : (q2 = Qzero) \/ (LRV A2 W2 W2'))
   (H3 : ρ_ok γ ρ1 ρ2 Γ) :
   ρ_ok (q1 .: (q2 .: γ)) (W1 .: (W2 .: ρ1)) (W1' .: (W2' .: ρ2)) (A1 .: (A2 .: Γ)).
 Proof. apply ρ_ok_cons; try apply ρ_ok_cons; try assumption. Qed.
@@ -249,12 +249,12 @@ Proof.
   destruct H0.
   repeat split; eauto; subst.
   - intros i.
-    move: (H1 i) => [E |[NE LR]].
+    move: (H1 i) => [E |LR].
     + unfold gradeVecAdd in E.
       edestruct Qsumzero. rewrite -> E. eauto with coeffects. left; auto.
     + destruct (Qeq_dec (γ1 i) Qzero). left. auto. right. auto.
   - intros i.
-    move: (H1 i) => [E |[NE LR]].
+    move: (H1 i) => [E |LR].
     + unfold gradeVecAdd in E.
       edestruct Qsumzero. rewrite -> E. eauto with coeffects. left; auto.
     + destruct (Qeq_dec (γ2 i) Qzero). left. auto. right. auto.
@@ -271,9 +271,6 @@ Proof. intros.
        unfold ρ_ok in *.
        destruct H.
        split; eauto.
-       intros i; eauto.
-       destruct (Qeq_dec (γ i) Qzero). left. auto.
-       right. split; auto.
 Qed.
 
 Lemma ρ_ok_diag_any : forall {n} {γ1: gradeVec n} {ρ Γ},
@@ -283,10 +280,6 @@ Proof.
   intros.
   unfold ρ_ok in *.
   destruct H. split; eauto.
-  intros i; eauto.
-  destruct (Qeq_dec (γ2 i) Qzero).
-  left. auto.
-  right. eauto.
 Qed.
 
 Lemma ρ_ok_prod : forall {n q}{γ : gradeVec n}{ρ1 ρ2 Γ},
@@ -301,9 +294,6 @@ Proof.
   unfold ρ_ok. split. auto.
   intros i; specialize h2 with i as [H0 | H0]; firstorder.
   left. unfold gradeVecScale in H0. apply Qprodzero in H0 as [H0 | H0]; firstorder.
-  right. split; auto.
-  rewrite dist_prod in H.
-  intro h. rewrite h in H. autorewrite with coeffects in H. apply H. auto.
 Qed.
 
 Lemma ρ_ok_le : forall {n}{γ γ' : gradeVec n}{ρ1 ρ2 Γ},
@@ -316,10 +306,8 @@ Proof.
   unfold gradeVecLe in H.
   split; auto. intro i.
   specialize H with i.
-  specialize h with i as [h0 | [h0 h1]]; auto. left.
+  specialize h with i as [h0 | h0 ]; auto. left.
   rewrite h0 in H. apply Q_lt_zero in H. auto.
-  destruct (Qeq_dec (γ' i) Qzero). left. auto.
-  right. split; auto.
 Qed.
 
 Lemma ST_CSub {n:nat} {γ:gradeVec n}{ Γ M1 M2 B γ' ϕ }:
@@ -363,7 +351,7 @@ Proof.
     intros ρ1 ρ2 Hρ.
     unfold ρ_ok in Hρ. destruct Hρ as [h1 h2].
     destruct (h2 i). rewrite P in H. eapply Qnontrivial in H. done.
-    destruct H as [NZ LR].
+    rename H into LR.
     exists (ρ1 i). exists (ρ2 i).
     repeat split; eauto using E_Var.
   - (* thunk *)
@@ -555,8 +543,8 @@ Proof.
       move: h5 => [W11 [W21 [W12 [W22 [E1 [E2 [R11 R12]]]]]]].
       subst. inversion E2'. inversion E1. subst.
       (*  use IH for N *)
-      move: (ρ_ok_cons R12' (or_intror (conj qne R12)) OK2) => h.
-      move: (ρ_ok_cons R11' (or_intror (conj qne R11)) h) => OK.
+      eapply ρ_ok_cons in R12'. 2: right; eapply R12. 2: eapply OK2. move: R12' => h.
+      eapply ρ_ok_cons in R11'. 2: right; eapply R11. 2: eapply h. move: R11' => OK.
       edestruct (H0 _ _ OK)
         as [T1 [T2 [ϕ1' [ϕ2' [HTE1 [HTE2 [HTL1 [HTL2 Hle]]]]]]]].
       clear H0 h.
@@ -659,9 +647,6 @@ Proof.
       have OKN1: (ρ_ok (Qmult q1 q' .: γ2)
                   (W1 .: ρ1) (W2 .: ρ2) (A .: Γ)).
       eapply ρ_ok_cons; eauto.
-      right. split; auto.
-      intro h. apply Qprodzero in h.
-      destruct h as [EQ | EQ]; try done.
       move: (H0 _ _ OKN1) =>
       [T1' [T2' [ϕ1'' [ϕ2'' [HTE1' [HTE2' [HTL1' [HTL2' Hle']]]]]]]].
       subst T1. subst T2.
