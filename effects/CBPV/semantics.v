@@ -43,12 +43,7 @@ Inductive EvalVal {n} (ρ : env n) : Val n -> VClos -> Prop :=
   | E_Inr V W :
     EvalVal ρ V W ->
     (* ================================ *)
-    EvalVal ρ (vInr V) (VClosInr W)
-
-  | E_VSub V W :
-    EvalVal ρ V W ->
-    (* ================== *)
-    EvalVal ρ V W.
+    EvalVal ρ (vInr V) (VClosInr W).
 
 Inductive EvalComp {n} (ρ : env n) : Comp n -> CClos -> E -> Prop :=
 | E_Abs M ϕ :
@@ -139,6 +134,6 @@ Inductive EvalComp {n} (ρ : env n) : Comp n -> CClos -> E -> Prop :=
 Hint Constructors EvalVal EvalComp : semantics.
 
 
-#[export]Hint Resolve E_Var E_Unit E_Thunk E_VPair E_Inl E_Inr E_VSub E_Abs
+#[export]Hint Resolve E_Var E_Unit E_Thunk E_VPair E_Inl E_Inr E_Abs
   E_AppAbs E_ForceThunk E_Ret E_LetRet E_Split E_CPair E_Fst E_Snd E_Casel
   E_Caser E_CSub : semantics.
