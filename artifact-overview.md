@@ -20,14 +20,23 @@ theorems in the paper, developed using the Coq/Rocq proof assistant.
        
   The `README.md` file provides an overview of the mechanization itself, 
   including the proof structure and required axioms.
-       
+
+## Location
+
+The files associated with this artifact are available on github:
+
+https://github.com/plclub/cbpv-effects-coeffects
+
+and archived on Zenodo at https://zenodo.org/records/12654518
+
 ## Dependencies
 
 No specific hardware requirements.
 
 ## Getting Started Guide
 
-This artifact includes a virtual machine image for evaluation.
+This artifact includes a virtual machine image for evaluation as well as a copy 
+of the proof repository.
 
 You should put the VM image (`disk.qcow2`) in the directory `vm-util` of the unzipped 
 repository.
@@ -148,7 +157,6 @@ Autosubst 2.)
 
 Detailed instructions for replicating the environment 
 are available in a [separate file](artifact-creation.md).
-
 
 ## QEMU Installation instructions
 
