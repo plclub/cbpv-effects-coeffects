@@ -1,43 +1,40 @@
 Effects and Coeffects in Call-by-Push-Value
 ============================================
 
-This repository contains a Coq mechanization of the results described in the paper "Effects and Coeffects in Call-By-Push-Value"
+This repository contains a Coq mechanization of the results described in the OOPSLA 2024 paper:
+["Effects and Coeffects in Call-By-Push-Value"](https://2024.splashcon.org/details/splash-2024-oopsla/93/Effects-and-Coeffects-in-Call-By-Push-Value). 
+and has been archived at [Zenodo](https://zenodo.org/records/12654518).
 
-We provide three options for connecting the paper with this code base.
+We provide two options for connecting the paper with this code base.
 
-- [Paper, with hyperlinks](short-hyperlinks.pdf)  contains hyperlinks that direct to the appropriate source file in this repository.
-- [Paper, with footnotes](short-footnotes.pdf) contains footnotes that indicate the appropriate source file and definition.
-- [Extended version of paper, with footnotes](extended-footnotes.pdf) includes the full figures and contains footnotes that indicate the appropriate source file and definition.
+- [Paper, with hyperlinks](short-hyperlinks.pdf) is the published version and
+  contains hyperlinks that direct to the appropriate source file in this
+  repository.
+  This is a local copy of [https://doi.org/10.1145/3689750](https://doi.org/10.1145/3689750).
+- [Extended version of paper, with footnotes](extended-footnotes.pdf) is an
+  extended version of the paper that includes the full figures and contains
+  footnotes to indicate the appropriate source file and definition.
+  This is a local copy of [https://arxiv.org/abs/2311.11795](https://arxiv.org/abs/2311.11795).
 
-Required Axioms and assumptions
--------------------------------
-
-As this work uses [Autosubst 2](https://github.com/uds-psl/autosubst2), we assume functional extensionality. We also use this axiom in the soundness proofs.
-
-  + Functional extensionality (`autosubst2/axioms.v`) 
-
-For flexibility this development axiomatizes the required properties of the effect and coeffect structures used by the type systems and operational semantics.
-
-  + Axiomatization of effects (`common/effects.v`)
-  + Axiomatization of coeffects (`common/coeffects.v`)
-  + Additional resource-tracking-specific axiomatization of coeffects
-     (`common/resource_axioms.v`)
-  + Axiomatization of discardable effects (`common/junk_axioms.v`)
 
 System requirements and build instructions
 ------------------------------------------
 
-This code has been tested with The Coq Proof Assistant, version 8.19.2. The development
-requires the Autosubst 2 tool to regenerate the syntax files, but these files
-are included in the distribution and do not need to be recreated.
+This code has been tested with The [Coq Proof
+Assistant](https://coq.inria.fr/), version 8.19.2. The development requires
+the [Autosubst 2](https://github.com/uds-psl/autosubst2) tool to regenerate
+the syntax files, but these syntax files are included in the distribution and
+do not need to be recreated.
 
-All proofs can be compiled using the `make` command from the toplevel directory.
+The proofs can be compiled using the `make` command from the toplevel
+directory.
 
-NOTE: The Makefile commands `make` and `make clean` will not regenerate or remove
-these files respectively; `make fullmake` and `make fullclean` will do so and
-so require Autosubst 2.
+NOTE: The Makefile commands `make` and `make clean` will not regenerate or
+remove the generated syntax files; `make fullmake` and `make fullclean` will
+do so and so require Autosubst 2.
 
-For tool installation help see `artifact-creation.md`.
+For tool installation help see `artifact-creation.md`. Alternatively, the 
+Zenodo archive contains a virtual machine.
 
 Mechanization overview 
 ----------------------
@@ -48,9 +45,9 @@ individual sections of the paper.
   - `autosubst2`: Two files distributed with Autosubst 2. These files have
     been slightly edited to make them compatible with Coq 8.19.0.
 
- - `common`: Files used by all subsections. This includes axiomatization for
-    the effects and coeffect structures as well as an additional library for
-    working with bounded natural numbers.
+ - `common`: Files used by all subsections. This includes the axiomatizations
+    for the effects and coeffect structures as well as an additional library
+    for working with bounded natural numbers.
 
   - `effects`: Results in Section 2 (Effects)
 
@@ -65,8 +62,8 @@ Proof structure
 
 The proofs include multiple base languages (CBPV, CBN, CBV) with
 multiple type systems (effects/general coeffects/resource
-coeffects/combined). In general, we use the following abbreviation for the
-base language:
+coeffects/combined). In general, we use the following abbreviations for the
+base languages:
 
   - CBPV = Call-By-Push-Value
   - CBN = Call-By-Name lambda-calculus
@@ -85,6 +82,22 @@ Each language has its own version of some subset of the following files:
   - `renaming.v`    : Typing judgment stable under variable renaming
   - `translation.v` : Definition of a translation from the language to CBPV
   - `proofs.v`      : Proofs that the translation preserves types
+
+Required Axioms and assumptions
+-------------------------------
+
+As this work uses [Autosubst 2](https://github.com/uds-psl/autosubst2), we assume functional extensionality. We also use this axiom in the soundness proofs.
+
+  + Functional extensionality (`autosubst2/axioms.v`) 
+
+For flexibility this development axiomatizes the required properties of the effect and coeffect structures used by the type systems and operational semantics.
+
+  + Axiomatization of effects (`common/effects.v`)
+  + Axiomatization of coeffects (`common/coeffects.v`)
+  + Additional resource-tracking-specific axiomatization of coeffects
+     (`common/resource_axioms.v`)
+  + Axiomatization of discardable effects (`common/junk_axioms.v`)
+
 
 Syntax overview
 ---------------

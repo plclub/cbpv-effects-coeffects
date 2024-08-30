@@ -1,6 +1,8 @@
 Require Export general.semantics general.typing.
 
-(* Definition of the logical relation for values and computations. *)
+(* Definition of the logical relation for values and computations.
+
+ *)
 Fixpoint LRV (A : ValTy) (W : VClos) : Prop :=
   match A with
   | VUnit => W = VClosUnit

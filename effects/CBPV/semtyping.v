@@ -1,6 +1,34 @@
 Require Export effects.CBPV.semantics effects.CBPV.typing.
 
-Definition LRM {n} (LR : CompTy -> CClos -> E -> Prop) (B : CompTy) (ρ : env n) (M : Comp n) (ϕ : E) :=
+(*
+
+Definition of the logical relation.
+ 
+In Definition 2.2, this relation is defined using set comprensions, dispatching 
+on the value and computation types.
+
+W[[ U𝜙 B ]]    = { clo(𝜌,{M}) | (𝜌,M) ∈ MJBK𝜙 }
+W[[unit ]]     = { ()}
+W[[ A1 × A2 ]] = { (W1,W2) | W1 ∈ W[[A1]] and W2 ∈ W[[ A2 ]] }
+W[[ A1 + A2 ]] = { inl W | W ∈ W [[ A1 ]]} ∪ { inr W | W ∈ W [[ A2 ]]}
+
+T[[ F A ]]𝜙     = { return W | W ∈ WJAK and 𝜙 ≡ 𝜀 }
+T[[ A → B]]𝜙    = { clo(ρ, λx. M) | ∀ W ∈ W[[A]], ((𝜌,x → W),M) ∈ M[[B]]𝜙 } 
+T[[ B1 & B2 ]]ϕ = { clo(ρ, ⟨M1, M2⟩ | (ρ, M1) ∈ M[[B1]]ϕ and (ρ, M2) ∈ M[[B2]]ϕ }
+
+M[[ B ]]𝜙       = { (𝜌,M) | 𝜌 ⊢ M ⇓ T # 𝜙1 and T ∈ T[[B]]𝜙2 and 𝜙1 · 𝜙2 ≤ 𝜙 }
+
+In Coq, we define these relations using characteristic functions: "VClos -> Prop" and "CClos -> Prop" 
+represent sets of closed values and closed terminals respectively. These sets are defined via fixpoint
+over the type structure as LRV and LRC. 
+
+*)
+
+
+(* Define  M[[ B ]]ϕ as a set of (ρ,M) pairs. The logical relation for computations (LRC) is 
+a parameter to this definition so that it can be defined separately from LRV/LRC below.
+ *)
+Definition LRM {n} (LR : CompTy -> CClos -> E -> Prop) (B : CompTy) (ρ : env n) (M : Comp n) (ϕ : E) : Prop :=
   exists T ϕ1 ϕ2 , EvalComp ρ M T ϕ1 /\ LR B T ϕ2 /\ (ϕ1 E+ ϕ2 E<= ϕ).
 
 Fixpoint LRV (A : ValTy) (W : VClos) : Prop :=
@@ -24,11 +52,24 @@ Fixpoint LRV (A : ValTy) (W : VClos) : Prop :=
       (forall W, LRV A W -> LRM LRC B (W .: ρ) M ϕ)
     end.
 
-Definition ρ_ok {n} ρ Γ := forall (i : fin n), (LRV (Γ i) (ρ i)).
+(* Semantic typing for environments, in Def 2.3 this is written as:
 
+      Γ ⊨ 𝜌 = x:A ∈ Γ implies x → W ∈ 𝜌 and W ∈ W[[A]] 
+
+   Here, we can use the scoping invariants to ensure that ρ and Γ have the 
+   same domain.
+*)
+Definition ρ_ok {n} (ρ : env n) (Γ : context n) := forall (i : fin n), (LRV (Γ i) (ρ i)).
+
+(* Semantic typing for values. Γ ⊨eff V : A
+
+Defined as  Γ ⊨ 𝜌 implies 𝜌 ⊢ V ⇓ W and W ∈ W[[A]]  *)
 Definition SemVWt {n} (Γ : context n) V A :=
   forall ρ, ρ_ok ρ Γ -> exists W, EvalVal ρ V W /\ LRV A W.
 
+(* Semantic typing for computations. Γ ⊨eff M : B
+
+Defined as  Γ ⊨ 𝜌 implies (𝜌,M) ∈ M[[B]]ϕ  *)
 Definition SemCWt {n} (Γ : context n) M B ϕ :=
   forall ρ, ρ_ok ρ Γ -> LRM LRC B ρ M ϕ.
 
